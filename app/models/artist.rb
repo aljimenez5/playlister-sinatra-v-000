@@ -8,7 +8,16 @@ class Artist < ActiveRecord::Base
   end
   
   def self.find_by_slug(slug)
-    unslug = slug.split('_').collect {|word| word.capitalize}.join(' ')
+    
+    
+    
+    slug.split('_').collect do |word| 
+      if counter == 0 || !do_not_cap.include?(word)
+        unslug << word.capitalize.join(' ')
+      else
+        unslug << word
+      end
+    end
     self.find_by_name(unslug)
   end
   
