@@ -4,12 +4,22 @@ class Song < ActiveRecord::Base
   has_many :genres, :through => :song_genres
   
   def slug 
-    self.name.downcase.gsub(/\W/, '-')
+    self.name.downcase.gsub(/\W/, '_')
   end
   
   def self.find_by_slug(slug)
-    unslug = slug.split('-').collect {|word| word.capitalize}.join(' ')
-    self.find_by_name(unslug)
+    unslugged = []
+    self.all.map do |obj| 
+      binding.pry
+      if obj.name.include?(slug.split('_').join(' '))
+        
+        unslugged << obj
+        
+      end
+    end
+   
+    self.find_by_name(unslugged.first.name)
+    
   end
   
 end
