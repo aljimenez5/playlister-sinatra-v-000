@@ -8,7 +8,16 @@ class Genre < ActiveRecord::Base
   end
   
   def self.find_by_slug(slug)
-    unslug = slug.split('-').collect {|word| word.capitalize}.join(' ')
+    do_not_cap = ["a", "they", "with", "the"]
+    counter = 0
+    unslug = ""
+    slug.split('_').collect do |word| 
+      if counter == 0 || !do_not_cap.include?(word)
+        unslug << word.capitalize.join(' ')
+      else
+        unslug << word
+      end
+    end
     self.find_by_name(unslug)
   end
   
